@@ -49,7 +49,7 @@ docker_build_and_push() {
   docker images
   docker build . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
   docker images
-  docker tag $GCLOUD_REGISTRY/${IMAGE_NAME}
+  #docker tag $GCLOUD_REGISTRY/${IMAGE_NAME}
   docker push $GCLOUD_REGISTRY/${IMAGE_NAME}
 }
 
