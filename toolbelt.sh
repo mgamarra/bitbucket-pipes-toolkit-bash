@@ -37,6 +37,10 @@ enable_debug() {
   fi
 }
 
+code_analisys() {
+  warning "Not implemented"
+}
+
 docker_build_and_push() {
   export IMAGE_NAME=$BITBUCKET_REPO_SLUG:${BITBUCKET_COMMIT::7}
   echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
@@ -97,6 +101,9 @@ gke_publish() {
 ### CHAMADAS EXTERNAS - Argumentos do script -----------------------------------------------#
 main () {
   case $1 in
+    "code_analisys")
+      code_analisys "$@"
+      ;;
     "docker_build_and_push")
       docker_build_and_push "$@"
       ;;
