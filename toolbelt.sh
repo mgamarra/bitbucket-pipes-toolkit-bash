@@ -4,6 +4,7 @@
 set -e
 set -o pipefail
 
+app_semver="0.2.1"
 
 gray="\\e[37m"
 blue="\\e[36m"
@@ -106,7 +107,7 @@ main () {
       gke_publish "$@"
       ;;
     "version")
-      echo "pgnci-$app_semver $2"
+      echo "$0-$app_semver $2"
       exit 0
       ;;
     *)
