@@ -62,6 +62,8 @@ internal_publish() {
   rm -rf ./deploy
   mkdir -p ./deploy
 
+  for f in $(find k8s -maxdepth 1  -regex '.*\.ya*ml'); do envsubst < $f > "./deploy/$(basename $f)" && sed -i '/^ *$/d' "./deploy/$(basename $f)"; done
+
   for f in $(find k8s/$BITBUCKET_BRANCH  -regex '.*\.ya*ml'); do envsubst < $f > "./deploy/$(basename $f)" && sed -i '/^ *$/d' "./deploy/$(basename $f)"; done
 
   ARCTIFACT_NAME=${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz
