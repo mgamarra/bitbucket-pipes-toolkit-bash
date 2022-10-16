@@ -73,6 +73,8 @@ internal_publish() {
 
   cat deployment.yaml
 
+  kubectl get namespace | grep -q "^$K8S_NAMESPACE " || kubectl create namespace $K8S_NAMESPACE
+  
   kubectl apply -R -f deployment.yaml  --record
 
   curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
