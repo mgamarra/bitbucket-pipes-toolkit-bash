@@ -2,8 +2,8 @@
 
 # Begin Standard 'imports'
 set -x
-set -e
-set -o pipefail
+#set -e
+#set -o pipefail
 
 app_semver="0.2.1"
 
