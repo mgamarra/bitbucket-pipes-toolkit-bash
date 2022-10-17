@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Begin Standard 'imports'
+set -x
 set -e
 set -o pipefail
 
@@ -72,6 +73,8 @@ internal_publish() {
   for f in $(find ./deploy  -regex '.*\.ya*ml'); do cat $f >> deployment.yaml && echo  -e "\n---\n" >> deployment.yaml; done
 
   cat deployment.yaml
+
+  #warning "kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
 
   kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
 
