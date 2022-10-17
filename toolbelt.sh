@@ -76,6 +76,12 @@ internal_publish() {
 
   #warning "kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
 
+  NS_EXISTS=$(kubectl get namespace | grep -q "^$K8S_NAMESPACE ")
+
+  if [ -z "$var" ]; then
+    kubectl create namespace $K8S_NAMESPACE
+  fi
+
   #kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
 
   kubectl apply -R -f deployment.yaml  --record
