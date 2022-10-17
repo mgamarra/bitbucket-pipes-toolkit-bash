@@ -78,7 +78,7 @@ internal_publish() {
 
   NS_EXISTS=$(kubectl get namespace | grep -q "^$K8S_NAMESPACE ")
 
-  if [ -z "$var" ]; then
+  if [ -z "$NS_EXISTS" ]; then
     kubectl create namespace $K8S_NAMESPACE
   fi
 
