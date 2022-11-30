@@ -49,7 +49,7 @@ docker_build_and_push() {
   docker login -u _json_key -p "$(cat ~/.gcloud-api-key.json)" https://us-east1-docker.pkg.dev
   docker images
   #docker build --network host . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
-  docker build --network host -f Dockerfile  -t $GCLOUD_REGISTRY/${IMAGE_NAME}
+  docker build --network host -f Dockerfile  -t $GCLOUD_REGISTRY/${IMAGE_NAME} .
   docker images
   #docker tag $GCLOUD_REGISTRY/${IMAGE_NAME}
   docker push $GCLOUD_REGISTRY/${IMAGE_NAME}
