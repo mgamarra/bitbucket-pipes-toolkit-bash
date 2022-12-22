@@ -69,10 +69,12 @@ internal_publish() {
 
   for f in $(find k8s/$BITBUCKET_BRANCH  -regex '.*\.ya*ml'); do envsubst < $f > "./deploy/$(basename $f)" && sed -i '/^ *$/d' "./deploy/$(basename $f)"; done
 
+  ls -lha ./deploy/
+  
   ARCTIFACT_NAME=${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz
   tar -zcvf ${ARCTIFACT_NAME} ./deploy
 
-  for f in $(find ./deploy  -regex '.*\.ya*ml'); do echo  -e "\n---\n$f\n---\n" >> deployment.yaml && cat "$f" >> deployment.yaml  ; done
+  for f in $(find ./deploy  -regex '.*\.ya*ml'); do echo  -e "\n---\n# $f\n---\n" >> deployment.yaml && cat "$f" >> deployment.yaml  ; done
  
   cat deployment.yaml
 
