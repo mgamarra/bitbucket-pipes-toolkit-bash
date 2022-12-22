@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Begin Standard 'imports'
-set -x
+#set -x
 #set -e
 #set -o pipefail
 
@@ -91,6 +91,7 @@ internal_publish() {
   curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
 
   echo "*****************"
+  kubectl get ingress -n $K8S_NAMESPACE 
   kubectl get ingress -n $K8S_NAMESPACE | grep $CI_PROJECT_NAME
   echo "*****************"
 
