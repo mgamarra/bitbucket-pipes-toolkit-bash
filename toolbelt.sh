@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Begin Standard 'imports'
-#set -x
+set -x
 #set -e
 #set -o pipefail
 
@@ -44,16 +44,16 @@ code_analisys() {
 
 docker_build_and_push() {
   export IMAGE_NAME=$BITBUCKET_REPO_SLUG:${BITBUCKET_COMMIT::7}
-  echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
+  echo "${GCLOUD_API_KEYFILE}" > ~/.gcloud-api-key.json
 
   docker login -u _json_key -p "$(cat ~/.gcloud-api-key.json)" https://us-east1-docker.pkg.dev
   docker images
-  docker build  . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
+  docker build  . -t "$GCLOUD_REGISTRY"/"${IMAGE_NAME}"
   #docker build --network host . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
   #docker build --network host -f Dockerfile  -t $GCLOUD_REGISTRY/${IMAGE_NAME} .
   docker images
   #docker tag $GCLOUD_REGISTRY/${IMAGE_NAME}
-  docker push $GCLOUD_REGISTRY/${IMAGE_NAME}
+  docker push "$GCLOUD_REGISTRY"/"${IMAGE_NAME}"
 }
 
 
@@ -72,8 +72,8 @@ internal_publish() {
   ARCTIFACT_NAME=${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz
   tar -zcvf ${ARCTIFACT_NAME} ./deploy
 
-  for f in $(find ./deploy  -regex '.*\.ya*ml'); do cat $f >> deployment.yaml && echo  -e "\n---\n" >> deployment.yaml; done
-
+  for f in $(find ./deploy  -regex '.*\.ya*ml'); do cat "$f" >> deployment.yaml && echo  -e "\n---\n" >> deployment.yaml; done
+ 
   cat deployment.yaml
 
   #warning "kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
@@ -81,7 +81,7 @@ internal_publish() {
   NS_EXISTS=$(kubectl get namespace | grep -q "^$K8S_NAMESPACE ")
 
   if [ -z "$NS_EXISTS" ]; then
-    kubectl create namespace $K8S_NAMESPACE
+    kubectl create namespace "$K8S_NAMESPACE"
   fi
 
   #kubectl get namespace | grep -q "^$K8S_NAMESPACE " | kubectl create namespace $K8S_NAMESPACE
@@ -91,8 +91,8 @@ internal_publish() {
   curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
 
   echo "*****************"
-  kubectl get ingress -n $K8S_NAMESPACE 
-  kubectl get ingress -n $K8S_NAMESPACE | grep $CI_PROJECT_NAME
+  kubectl get ingress -n "$K8S_NAMESPACE" 
+  kubectl get ingress -n "$K8S_NAMESPACE" | grep "$CI_PROJECT_NAME"
   echo "*****************"
 
   #BITBUCKET_USERNAME=mgamarra.ext@mtrix.com.br
@@ -101,18 +101,18 @@ internal_publish() {
 }
 
 okd_publish() {
-  oc login --insecure-skip-tls-verify ${OC_DESEN_URL} -u ${OC_DESEN_USERNAME} -p ${OC_DESEN_PASSWORD}
+  oc login --insecure-skip-tls-verify" ${OC_DESEN_URL}" -u "${OC_DESEN_USERNAME}" -p "${OC_DESEN_PASSWORD}"
   internal_publish
 }    
 
 gke_publish() {
-  echo ${GCLOUD_API_KEYFILE} > gcloud-api-key.json
-  echo ${GCLOUD_API_KEYFILE} 
+  echo "${GCLOUD_API_KEYFILE}" > gcloud-api-key.json
+  echo "${GCLOUD_API_KEYFILE}" 
 
   gke-gcloud-auth-plugin --version
-  getent passwd $USER | awk -F ':' '{print $6}'
+  getent passwd "$USER" | awk -F ':' '{print $6}'
   gcloud auth login --cred-file=gcloud-api-key.json 
-  gcloud container clusters get-credentials $GCLOUD_K8S_CLUSTER_NAME --zone=$GCLOUD_K8S_ZONE --project $GCLOUD_K8S_PROJECT_ID      
+  gcloud container clusters get-credentials "$GCLOUD_K8S_CLUSTER_NAME" --zone="$GCLOUD_K8S_ZONE" --project "$GCLOUD_K8S_PROJECT_ID"     
   internal_publish
 }    
 
