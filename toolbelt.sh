@@ -90,6 +90,10 @@ internal_publish() {
 
   curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
 
+  echo "*****************"
+  kubectl get ingress -n $K8S_NAMESPACE | grep $CI_PROJECT_NAME
+  echo "*****************"
+
   #BITBUCKET_USERNAME=mgamarra.ext@mtrix.com.br
   #BITBUCKET_APP_PASSWORD=@34NovaSenha562201
   #curl -X POST "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${ARCTIFACT_NAME}"  
