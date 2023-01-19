@@ -94,7 +94,11 @@ internal_publish() {
 
   echo "*****************"
   kubectl get ingress -n "$K8S_NAMESPACE" 
+  echo "*****************  URL NGIX"
   kubectl get ingress -n "$K8S_NAMESPACE" | grep "$CI_PROJECT_NAME"
+  echo "***************** URL APISIX"
+  
+  kubectl get ApisixRoute -n "$K8S_NAMESPACE" | grep "$CI_PROJECT_NAME"
   echo "*****************"
 
   #BITBUCKET_USERNAME=mgamarra.ext@mtrix.com.br
