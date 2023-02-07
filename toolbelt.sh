@@ -118,8 +118,9 @@ gke_publish() {
 
   gke-gcloud-auth-plugin --version
   getent passwd "$USER" | awk -F ':' '{print $6}'
-  gcloud container clusters get-credentials "$GCLOUD_K8S_CLUSTER_NAME" --zone="$GCLOUD_K8S_ZONE" --project "$GCLOUD_K8S_PROJECT_ID"    
+  gcloud container clusters get-credentials "$GCLOUD_K8S_CLUSTER_NAME" --region="$GCLOUD_K8S_REGION" --project "$GCLOUD_K8S_PROJECT_ID"    
   #gcloud container clusters get-credentials core-development --region us-central1 --project prj-dev-d-base-f34c 
+
   internal_publish
 }    
 
