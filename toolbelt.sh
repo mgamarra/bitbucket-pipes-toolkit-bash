@@ -46,7 +46,7 @@ docker_build_and_push() {
   export IMAGE_NAME=$BITBUCKET_REPO_SLUG:${BITBUCKET_COMMIT::7}
   echo "${GCLOUD_API_KEYFILE}" > ~/.gcloud-api-key.json
 
-  docker login -u _json_key -p "$(cat ~/.gcloud-api-key.json)" https://us-east1-docker.pkg.dev
+  docker login -u _json_key -p "$(cat ~/.gcloud-api-key.json)" ${GCLOUD_REGISTRY}
   docker images
   docker build  . -t "$GCLOUD_REGISTRY"/"${IMAGE_NAME}"
   #docker build --network host . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
