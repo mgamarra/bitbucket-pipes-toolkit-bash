@@ -48,7 +48,8 @@ docker_build_and_push() {
 
   docker login -u _json_key -p "$(cat ~/.gcloud-api-key.json)" ${GCLOUD_REGISTRY}
   docker images
-  docker build  . -t "$GCLOUD_REGISTRY"/"${IMAGE_NAME}"
+  #docker build  . -t "$GCLOUD_REGISTRY"/"${IMAGE_NAME}"
+  docker build -f Dockerfile -t "$GCLOUD_REGISTRY"/"${IMAGE_NAME}" $(for i in `env`; do out+="--build-arg $i " ; done; echo $out;) .
   #docker build --network host . -t $GCLOUD_REGISTRY/${IMAGE_NAME}
   #docker build --network host -f Dockerfile  -t $GCLOUD_REGISTRY/${IMAGE_NAME} .
   docker images
@@ -90,7 +91,7 @@ internal_publish() {
 
   kubectl apply -R -f deployment.yaml  --record
 
-  curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
+ # curl -v --upload-file ${ARCTIFACT_NAME} -H "Authorization: Bearer `gcloud auth print-access-token`" "https://storage.googleapis.com/cicd-bitbucket-pipelines/${BITBUCKET_REPO_SLUG}-${BITBUCKET_COMMIT}.tar.gz"
 
   echo "*****************"
   kubectl get ingress -n "$K8S_NAMESPACE" 
