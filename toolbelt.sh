@@ -66,6 +66,10 @@ internal_publish() {
   rm -rf ./deploy
   mkdir -p ./deploy
 
+  if [ $BITBUCKET_BRANCH == 'master' ]; then 
+    sed -i 's/\${CI_PROJECT_NAME}-\${INGRESS_SUFIX}/\${CI_PROJECT_NAME}.\${INGRESS_SUFIX}/g' k8s/apisix-ingress.yaml
+  fi
+
   for f in $(find k8s -maxdepth 1  -regex '.*\.ya*ml'); do envsubst < $f > "./deploy/$(basename $f)" && sed -i '/^ *$/d' "./deploy/${f//[\/]/-}"; done
 
   for f in $(find k8s/$BITBUCKET_BRANCH  -regex '.*\.ya*ml'); do envsubst < $f > "./deploy/$(basename $f)" && sed -i '/^ *$/d' "./deploy/$(basename $f)"; done
